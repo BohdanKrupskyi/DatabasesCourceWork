@@ -1,5 +1,6 @@
 ﻿use master
 go
+delete from* Case
 
-drop database LawFirmDb
 go
+drop database LawFirmDb

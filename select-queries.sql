@@ -10,17 +10,17 @@ from HeadOfDepartment hod
 join Employee E on hod.EmployeeId = E.EmployeeId
 join Department D on E.DepartmentId = D.DepartmentId;
 
--- Select lawyers hired in 2022 year
+-- Select lawyers hired in 2021-2022 year
 select * from Employee ee
-join Lawyer L on ee.EmployeeId = L.EmployeeId
-where HireDate between '2022-01-01' and '2022-12-31';
+--join Lawyer L on ee.EmployeeId = L.EmployeeId
+where HireDate between '2021-01-01' and '2022-12-31';
 
 -- Top 5 highest salary employee
 select top 5 * from Employee ee
 order by Salary desc;
 
 -- Number of employees per department
-select DepartmentId, count(*) from Employee ee
+select DepartmentId, count(*) as Employees from Employee ee
 group by DepartmentId
 order by count(*) desc;
 
@@ -29,7 +29,8 @@ select c.CaseId,
        c.Description as CaseDescription,
        c.FilingDate,
        c.Status,
-       cus.Name
+       cus.FirstName,
+	   cus.LastName
 from [Case] c
 join Customer cus on c.CustomerId = cus.CustomerId
 where not exists(select 1 from LawyerAssigment la where la.CaseId = c.CaseId);
@@ -59,8 +60,7 @@ order by ClosedCases desc;
 
 --  Cities with most cases
 select city.CityId, city.Name,
-       (select count(*) from [Case] c
-        join Customer cus on c.CustomerId = cus.CustomerId
+       (select count(distinct c.CaseId) from [Case] c
         join LawyerAssigment LA on c.CaseId = LA.CaseId
         join Lawyer L on LA.LawyerId = L.LawyerId
         join Employee E on E.EmployeeId = L.EmployeeId
@@ -74,3 +74,7 @@ select datepart(year, c.FilingDate) as FilingYear,
 from [Case] c
 group by datepart(year, c.FilingDate)
 order by FilingYear desc
+
+--Client with 2FA
+select FirstName, LastName, PhoneNumber from Customer
+where AuthCompleted = 1

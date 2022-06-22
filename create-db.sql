@@ -52,7 +52,11 @@ go
 create table Customer
 (
     CustomerId int identity primary key,
-    Name nvarchar(64) not null,
+    FirstName nvarchar(64) not null,
+	LastName nvarchar(64) not null,
+	Email nvarchar(30) not null,
+	PhoneNumber nvarchar(40) not null,
+	AuthCompleted bit not null default 0,
 )
 go
 
